@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "port-scanner-lite"
+version = "0.2.0"
+description = "Small TCP connect scanner that defaults to localhost and requires an explicit authorization flag for other hosts."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+port-scanner-lite = "scanner:main"
+
+[tool.setuptools]
+py-modules = ["scanner"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

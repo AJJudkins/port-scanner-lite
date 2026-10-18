@@ -51,3 +51,29 @@ def test_outputs(listener):
 def test_remote_host_requires_flag():
     with pytest.raises(SystemExit):
         scanner.main(["--host", "192.0.2.1", "--ports", "80"])
+
+
+import pytest
+
+
+def test_bad_ports_exit_cleanly():
+    import scanner
+    for spec in ("abc", "0", "70000", "10-5", "1-99999"):
+        with pytest.raises(SystemExit) as e:
+            scanner.main(["--ports", spec])
+        assert e.value.code == 2
+
+
+def test_remote_requires_authorization_and_port_cap():
+    import scanner
+    with pytest.raises(SystemExit):
+        scanner.main(["--host", "192.0.2.1", "--ports", "80"])
+    with pytest.raises(SystemExit):
+        scanner.main(["--host", "192.0.2.1", "--ports", "1-2000", "--i-am-authorized"])
+
+
+def test_workers_and_timeout_bounds():
+    import scanner
+    for args in (["--workers", "0"], ["--workers", "9999"], ["--timeout", "0"], ["--timeout", "99"]):
+        with pytest.raises(SystemExit):
+            scanner.main(args)
